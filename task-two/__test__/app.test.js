@@ -22,6 +22,8 @@ describe('POST /calculate', () => {
                 "b": 20
             }
         }
+
+        
         request(app)
             .post('/calculate')
             .set('Accept', 'application/json')
