@@ -1,7 +1,7 @@
 import express, {Request, Response, NextFunction} from 'express';
 import fs from 'fs';
-import {calculateArea} from '../controllers/controllers'
-import {data} from '../utils/calculator'
+import { calculateArea } from '../controllers/controllers'
+import { data } from '../utils/getDatabase'
 // import database from '../controllers'
 
 const router = express.Router();

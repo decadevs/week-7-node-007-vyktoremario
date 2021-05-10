@@ -2,20 +2,10 @@ import express, { Request, Response, NextFunction } from 'express';
 import fs from 'fs';
 import path from 'path';
 import Joi from 'joi';
+import { Shape } from '../utils/interface'
+import { pushToDatabase } from '../utils/getDatabase'
+import { createID } from '../utils/createID'
 
-interface Shape {
-    id: number
-    shape: string
-    dimension: {
-        a: number
-        b: number
-        c?: number
-    } | number
-    area: string
-    createdAt: Date
-}
-
-let ID: number
 const squared = '\u00B2'
 function calculateTriangle(req: Request, res: Response) {
     const shape = dimensionSchema.validate(req.body)
@@ -83,13 +73,7 @@ function calculateRectangle(req: Request, res: Response) {
     }
 }
 
-function createID() {
-    if (!data.length) {
-        return ID = 1
-    } else {
-        return ID = data[data.length - 1].id + 1
-    }
-}
+
 
 const Schema:Joi.ObjectSchema<Shape> = Joi.object({
     shape: Joi.string().required(),
@@ -105,27 +89,4 @@ const dimensionSchema:Joi.ObjectSchema<Shape> = Joi.object({
     }).required()
 })
 
-let data:Shape[] = database()
-function database() {
-    try {
-        return JSON.parse(fs.readFileSync(path.join(__dirname, '../database/db.json'), 'utf8'))
-    } catch (err) {
-        return []
-    }
-}
-
-function writeDataToFile(content: Shape[]) {
-    return fs.writeFileSync(path.join(__dirname, '../database/db.json'), JSON.stringify(content, null, 2), "utf8");
-}
-
-function pushToDatabase(value: Shape) {
-    if (!data) {
-        writeDataToFile([value])
-    } else {
-        data.push(value)
-        writeDataToFile(data)
-    }
-}
-
-
-export { calculateTriangle, calculateCircle, calculateSquare, calculateRectangle, data, createID }
+export { calculateTriangle, calculateCircle, calculateSquare, calculateRectangle, createID }
